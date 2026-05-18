@@ -5,6 +5,7 @@ class_name CraftableItem
 @export var byproducts: Array[Item] = []  ## Extra items received when crafting (can have duplicates)
 @export var can_be_broken_down: bool = false
 @export var broken_down_loss_blacklist: Array[Item] = []  ## Materials NOT returned when breaking down
+@export var crafting_time : float = 0;
 
 ## Craft from inventory
 func craft_from(inventory: Inventory) -> bool:
