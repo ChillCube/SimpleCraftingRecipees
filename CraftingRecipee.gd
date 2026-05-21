@@ -45,14 +45,17 @@ func break_down() -> Array[Item]:
 
 ## Check if item can be crafted with given inventory
 func can_craft(inventory: Inventory) -> bool:
-	# Create a copy of materials to track what we've found
+	# Build a tally of what we need (same item can appear multiple times in materials)
 	var needed_materials: Array[Item] = materials.duplicate()
-	
+
+	# For each unique item in inventory, consume up to get_amount() entries from the needed list
 	for item in inventory.items:
-		var index = needed_materials.find(item)
-		if index != -1:
-			needed_materials.remove_at(index)
-	
+		var available := inventory.get_amount(item)
+		for _i in range(available):
+			var index := needed_materials.find(item)
+			if index != -1:
+				needed_materials.remove_at(index)
+
 	return needed_materials.is_empty()
 
 ## Check if a material is blacklisted
@@ -146,14 +149,15 @@ func get_breakdown_text() -> String:
 
 ## Get missing materials as array
 func get_missing_materials(inventory: Inventory) -> Array[Item]:
-	var missing: Array[Item] = []
 	var needed_materials: Array[Item] = materials.duplicate()
-	
+
 	for item in inventory.items:
-		var index = needed_materials.find(item)
-		if index != -1:
-			needed_materials.remove_at(index)
-	
+		var available := inventory.get_amount(item)
+		for _i in range(available):
+			var index := needed_materials.find(item)
+			if index != -1:
+				needed_materials.remove_at(index)
+
 	return needed_materials
 
 ## Get percentage of materials you get back when breaking down
